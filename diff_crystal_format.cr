@@ -1,3 +1,12 @@
+#!/usr/bin/env crystal
+#
+# Crystal format change previewer:
+# dryrun "crystal tool format" and show the changes
+#
+# requirements: Crystal, GNU diff
+#
+# usage: diff_crystal_format [FILES] [DIRS]
+
 require "file_utils"
 
 module DiffCrystalFormat
@@ -5,37 +14,41 @@ module DiffCrystalFormat
     fname.gsub(/[\/.]/, "_")
   end
 
-  def self.formatted_fnames(dir = "")
-    cmd = "crystal tool format --check #{dir} 2>&1"
+  def self.fnames_with_changes(args = [] of String)
+    cmd = "crystal tool format --check #{args.join(' ')} 2>&1"
     `#{cmd}`.scan(/'(.*)'/).map { |m| m[1] }
   end
 
   def self.diffs(fnames, diff_opts)
-    diffs = fnames.map { |fn|
+    fnames.map { |fn|
       pn = File.basename(PROGRAM_NAME)
       content = File.read(fn)
-      tf_orig =
-        File.tempfile(escape_fname([pn, fn, "orig"].join("_"))) { |f|
-          File.write(f.path, content)
-        }
-      tf_to_format =
-        File.tempfile(escape_fname([pn, fn].join("_"))) { |f|
-          File.write(f.path, content)
-        }
-      system("crystal tool format #{tf_to_format.path}")
-      diff = `diff -u #{diff_opts} #{tf_orig.path} #{tf_to_format.path}`
-      [tf_orig, tf_to_format].each { |tf| tf.delete }
+      tfn_orig = File.tempfile(escape_fname([pn, fn, "orig"].join("_"))) { |f|
+        File.write(f.path, content)
+      }
+      tfn_formatted = File.tempfile(escape_fname([pn, fn].join("_"))) { |f|
+        File.write(f.path, content)
+      }
+      system("crystal tool format #{tfn_formatted.path}")
+      diff = `diff -u #{diff_opts} #{tfn_orig.path} #{tfn_formatted.path}`
+      [tfn_orig, tfn_formatted].each { |fn| fn.delete }
       diff
     }
-    diffs
   end
 
-  def self.run
-    fnames = DiffCrystalFormat.formatted_fnames
-    diff_opts = (STDOUT.tty? ? "--color=always" : "")
-    diffs = DiffCrystalFormat.diffs(fnames, diff_opts)
-    diffs.each { |d| puts d }
+  def self.main(argv = ARGV)
+    fnames = DiffCrystalFormat.fnames_with_changes(argv)
+    diff_opts = STDOUT.tty? ? "--color=always" : ""
+    DiffCrystalFormat.diffs(fnames, diff_opts).each { |diff| puts diff }
+  end
+
+  # kludgey equivalent for Ruby's "$0 == __FILE__" idiom
+  def self.called_as_a_script?
+    File.basename(PROGRAM_NAME, ".tmp").sub(/^crystal-run-/, "") ==
+      File.basename(__FILE__, ".cr")
   end
 end
 
-DiffCrystalFormat.run
+if DiffCrystalFormat.called_as_a_script?
+  DiffCrystalFormat.main
+end
