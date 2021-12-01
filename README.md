@@ -14,6 +14,7 @@ will change your code in `diff` format.
 
   * Build time
     - Crystal
+    - Shards (usually bundled with Crystal)
   * Run time
     - GNU diff
 

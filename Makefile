@@ -1,8 +1,10 @@
 all: checkall build
 
-build: src/diff_crystal_format.cr
-	mkdir -p bin
-	crystal build --release -o bin/diff_crystal_format $<
+build:
+	shards build --release
+
+depcheck:
+	shards check
 
 spec:
 	crystal spec
@@ -15,7 +17,7 @@ formatcheck:
 format:
 	crystal tool format
 
-checkall: formatcheck check
+checkall: check formatcheck depcheck
 
 clean:
 	rm -fr bin/

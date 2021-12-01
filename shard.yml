@@ -1,0 +1,13 @@
+name: diffcrystalformat
+version: 0.1.0
+
+authors:
+  - Hisashi Morita
+
+targets:
+  diff_crystal_format:
+    main: src/diff_crystal_format.cr
+
+crystal: 1.2.1
+
+license: MIT
