@@ -67,6 +67,11 @@ $
   * File names displayed are not human-friendly, as slashes (`/`) are just
     replaced with dots (`.`), due to my laziness.
 
+## License
+
+This software is distributed under The MIT License. See the
+[LICENSE](LICENSE) file.
+
 ## Contributing
 
   1. Fork it (<https://github.com/hisashim/diffcrystalformat/fork>)
