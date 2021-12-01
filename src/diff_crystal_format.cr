@@ -10,6 +10,8 @@
 require "file_utils"
 
 module DiffCrystalFormat
+  VERSION = "0.1.0"
+
   def self.escape_fname(fname)
     fname.gsub(/[\/.]/, "_")
   end
