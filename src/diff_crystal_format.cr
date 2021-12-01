@@ -14,7 +14,7 @@ module DiffCrystalFormat
 
   # Returns string with characters unsuitable for file paths replaced.
   def self.safe_fname(fname)
-    fname.gsub(/[\/.]/, "_")
+    fname.gsub(/\//, ".") # FIXME: make directory names readable.
   end
 
   # Returns file names which will be changed.
