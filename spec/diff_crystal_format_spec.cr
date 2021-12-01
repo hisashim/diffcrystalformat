@@ -16,8 +16,8 @@ describe DiffCrystalFormat do
         EOS
       tf = File.tempfile { |f| File.write(f.path, src) }
 
-      actual = DiffCrystalFormat.diffs([tf.path], nil).map { |diff|
-        diff.lines(chomp: false)[3..].join # Skip diff header (first 3 lines)
+      actual = DiffCrystalFormat.diffs([tf.path]).map { |diff|
+        diff.lines(chomp: false)[3..].join # Skip diff header (first 3 lines).
       }
       actual.should eq [expected]
     end
