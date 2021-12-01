@@ -1,11 +1,4 @@
 #!/usr/bin/env crystal
-#
-# Crystal format change previewer:
-# dryrun "crystal tool format" and show the changes
-#
-# requirements: Crystal, GNU diff
-#
-# usage: diff_crystal_format [FILES] [DIRS]
 
 require "file_utils"
 
