@@ -7,8 +7,8 @@ previewer.
 Crystal's built-in formatter (`crystal tool format`) is very useful and
 helpful. Its dry-run mode (`crystal tool format --check`), however, tells us
 only the file names which will produce changes and not the changes
-themselves (as of Crystal 1.2.1). DiffCrystalFormat shows how the formatter
-will change your code in `diff` format.
+themselves (as of Crystal 1.2.1). DiffCrystalFormat shows the changes the
+formatter will make, in `diff` format.
 
 ## Requirements
 
@@ -70,7 +70,7 @@ $
 
 ## License
 
-This software is distributed under The MIT License. See the
+This software is distributed under the MIT License. See the
 [LICENSE](LICENSE) file.
 
 ## Contributing
